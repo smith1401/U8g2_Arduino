@@ -893,7 +893,9 @@ extern "C" uint8_t u8x8_byte_arduino_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t a
 #if defined(ESP_PLATFORM)
       //T.M.L 2023-02-28: use the block transfer function on ESP, which does not overwrite the buffer.
       SPI.writeBytes((uint8_t*)arg_ptr, arg_int);  
-#else    
+#elif defined(STM32F4) | defined(STM32F1)
+      SPI.transfer((uint8_t*)arg_ptr, arg_int);
+#else
       // 1.6.5 offers a block transfer, but the problem is, that the
       // buffer is overwritten with the incoming data
       // so it can not be used...
